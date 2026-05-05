@@ -15,7 +15,7 @@ export default function SurpriseContent() {
         className="bg-white rounded-2xl p-6 w-[80%] max-w-md text-center shadow-2xl"
       >
         <h1 className="text-2xl font-bold mb-4">🎉 Surprise 🎉</h1>
-        <p>Add your photos & message here 💕</p>
+        <p>look bix here will be all main stuff. and obviusly it will be full screen</p>
       </motion.div>
     </motion.div>
   );
