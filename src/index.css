@@ -246,9 +246,30 @@ p {
   50% { border-color: transparent }
 }
 .glow-text {
-  color: white;
+  color: #ffffff;
+
   text-shadow:
-    0 0 5px rgba(255, 255, 255, 0.8),
-    0 0 10px rgba(255, 105, 180, 0.8),
-    0 0 20px rgba(255, 105, 180, 0.6);
+    0 0 6px rgba(250, 137, 154, 0.6),   /* soft pink glow */
+    0 0 12px rgba(253, 75, 164, 0.5),  /* medium pink */
+    0 0 20px rgba(199, 8, 110, 0.35),  /* deeper romantic pink */
+    0 0 30px rgba(59, 49, 49, 0.834);  /* soft dreamy haze */
+}
+.round-top-text {
+  display: inline-block;
+  padding: 10px 16px;
+
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+
+  background: rgba(255, 192, 203, 0.3);
+  color: white;
+}
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Playfair+Display:ital,wght@1,600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bad+Script&display=swap');
+.romantic-text {
+  font-family: 'Bad Script', cursive;
+}
+
+.title-text {
+  font-family: 'Playfair Display', serif;
 }
