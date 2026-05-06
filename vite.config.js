@@ -5,10 +5,11 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
   plugins: [tailwindcss(), react()],
   theme: {
-  extend: {
-    fontFamily: {
-      poppins: ['Poppins', 'sans-serif'],
+    extend: {
+      fontFamily: {
+        poppins: ['Poppins', 'sans-serif'],
+       
+      },
     },
-  },
-}
+  }
 })

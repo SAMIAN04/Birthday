@@ -96,8 +96,8 @@ const CountdownCard = ({ onFinish }) => {
       
 <p className={
   isFinished
-    ? "text-white text-2xl font-bold animate-pulse glow-text"
-    : "text-pink-200 glow-text"
+    ? "text-white text-2xl font-bold animate-pulse glow-text2"
+    : "text-pink-200 glow-text2"
 }>
   {isFinished
     ? "OMG IT'S THE TIME! 🎉"
@@ -109,7 +109,7 @@ const CountdownCard = ({ onFinish }) => {
           <img
             src={currentGif}
             alt=""
-            className="w-40 drop-shadow-2xl floaty"
+            className="w-40 drop-shadow-2xl floaty gif-shadow-romantic "
           />
 
           {/* 💥 FINAL 3 SEC */}
