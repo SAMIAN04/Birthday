@@ -16,7 +16,7 @@ const slides = [
   },
   {
     img: "/4.png",
-    text: "Now it’s kinda hard not to notice her in everything. she is sooo perfect and precious💞"
+    text: "she is sooo perfect and precious💞,Now it’s kinda hard not to notice her in everything. "
   },
   {
     img: "/5.png",
@@ -128,7 +128,7 @@ export default function SurpriseContent() {
             className="absolute inset-0 z-0"
           >
             <img src="/bg.png" alt="background" className="w-full h-full object-cover" />
-            <div className="absolute inset-0 bg-black/50" />
+            <div className="absolute inset-0 bg-black/50 backdrop-blur-xs" />
           </motion.div>
         )}
       </AnimatePresence>
