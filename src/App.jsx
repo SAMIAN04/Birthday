@@ -141,7 +141,7 @@ function App() {
             <img
               src="/excited.gif"
               alt="Start"
-              className="w-40 drop-shadow-2xl gif-shadow-romantic "
+              className="w-40 drop-shadow-2xl "
             />
           </button>
 

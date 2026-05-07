@@ -193,40 +193,102 @@ export default function SurpriseContent() {
           </motion.div>
         )}
 
-        {stage === "final1" && (
-          <motion.div 
-            key="final2-stage"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ type: "spring", damping: 20 }}
-            className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 z-10 "
-          >
-            <h2 className="glow-text text-2xl mb-4">
-              Here is a kinder for you my crazy litte babygirl 😚
-            </h2>
-            <img src="/kinder.gif" className="w-64 gif-shadow-romantic" alt="kinder joy surprise" />
-          </motion.div>
-        )}
+     {/* 💖 FINAL STAGE 1 */}
+{stage === "final1" && (
+  <motion.div
+    key="final1-stage"
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    exit={{ opacity: 0 }}
+    transition={{ duration: 0.5 }}
+    className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 z-10"
+  >
+    {/* ✨ PRELOAD HIDDEN GIF */}
+    <img
+      src="/love.gif"
+      alt=""
+      className="hidden"
+      loading="eager"
+      decoding="async"
+    />
 
-        {stage === "final2" && (
-          <motion.div 
-            key="final1-stage"
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0 }}
-            // transition={{ duration: 0.8 }}
-            className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 z-10 "
-          >
-             <h2 className="glow-text text-xl mt-8 font-black drop-shadow-xl tracking-tight romantic-text bend-text">
-              I LOVE YOU SO MUCH MY PRETTY PRINCESS 💖
-            </h2>
-            <img src="/love.gif" className="w-80 drop-shadow-2xl gif-shadow-romantic" alt="love" />
-           
-            <p className="glow-text font-bold text-xl px-4 leading-relaxed w-[90%]">
-              "Thank you for being the best part of my life. May your day be as beautiful as your smile. Happy Birthday my love of life! 🎂✨"
-            </p>
-          </motion.div>
-        )}
+    <motion.h2
+      initial={{ y: 20, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ delay: 0.1, duration: 0.5 }}
+      className="glow-text text-2xl mb-4"
+    >
+      Here is a kinder for you my crazy little babygirl 😚
+    </motion.h2>
+
+    <motion.img
+      src="/kinder.gif"
+      alt="kinder joy surprise"
+      loading="eager"
+      decoding="async"
+      initial={{ scale: 0.85, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+      transition={{
+        duration: 0.6,
+        ease: "easeOut",
+      }}
+      className="w-64 gif-shadow-romantic will-change-transform"
+    />
+  </motion.div>
+)}
+
+{/* 💖 FINAL STAGE 2 */}
+{stage === "final2" && (
+  <motion.div
+    key="final2-stage"
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    exit={{ opacity: 0 }}
+    transition={{ duration: 0.45 }}
+    className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 z-10"
+  >
+    <motion.h2
+      initial={{ y: 25, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{
+        duration: 0.55,
+        ease: "easeOut",
+      }}
+      className="glow-text text-xl mt-8 font-black drop-shadow-xl tracking-tight bend-text"
+    >
+      I LOVE YOU SO MUCH MY PRETTY PRINCESS 💖
+    </motion.h2>
+
+    <motion.img
+      src="/love.gif"
+      alt="love"
+      loading="eager"
+      decoding="async"
+      initial={{ scale: 0.9, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+      transition={{
+        delay: 0.15,
+        duration: 0.6,
+        ease: "easeOut",
+      }}
+      className="w-80 drop-shadow-2xl gif-shadow-romantic will-change-transform"
+    />
+
+    <motion.p
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{
+        delay: 0.3,
+        duration: 0.5,
+      }}
+      className="glow-text font-bold text-xl px-4 leading-relaxed w-[90%]"
+    >
+      Thank you for being the best part of my life.
+      May your day be as beautiful as your smile.
+      Happy Birthday my love of life! 🎂✨
+    </motion.p>
+  </motion.div>
+)}
       </AnimatePresence>
     </motion.div>
   );
