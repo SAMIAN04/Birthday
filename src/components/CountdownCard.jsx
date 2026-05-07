@@ -1,16 +1,30 @@
 import Card from "./Card";
 import { useEffect, useRef, useState } from "react";
 
-const TARGET_DATE = "2026-05-04T14:21:00";
+const TARGET_DATE = "2026-05-08T08:46:00";
 
 const TIME_UNITS = [
-  { label: "Days",  ms: 1000 * 60 * 60 * 24 },
+  { label: "Days", ms: 1000 * 60 * 60 * 24 },
   { label: "Hours", ms: 1000 * 60 * 60 },
-  { label: "Min",   ms: 1000 * 60 },
-  { label: "Sec",   ms: 1000 },
+  { label: "Min", ms: 1000 * 60 },
+  { label: "Sec", ms: 1000 },
 ];
 
-const getTimeLeft = () => new Date(TARGET_DATE) - new Date();
+const getTimeLeft = () => {
+  const target = new Date(TARGET_DATE);
+  const now = new Date();
+  const diff = target - now;
+
+  if (diff <= 0) return null;
+
+  return {
+    total: diff,
+    days: Math.floor(diff / (1000 * 60 * 60 * 24)),
+    hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
+    minutes: Math.floor((diff / 1000 / 60) % 60),
+    seconds: Math.floor((diff / 1000) % 60),
+  };
+};
 
 const BOX_CLASS =
   "flex flex-col items-center justify-center w-[70px] h-[70px] rounded-xl bg-black/10 backdrop-blur-lg border border-white/20 shadow-lg";
@@ -21,6 +35,7 @@ const CountdownCard = ({ onFinish }) => {
 
   const [timeLeft, setTimeLeft] = useState(getTimeLeft());
   const [finalSeconds, setFinalSeconds] = useState(null);
+  const [shake, setShake] = useState(false);
 
   const isFinished = finalSeconds === 0;
 
@@ -33,17 +48,27 @@ const CountdownCard = ({ onFinish }) => {
 
   useEffect(() => {
     intervalRef.current = setInterval(() => {
-      const diff = getTimeLeft();
+      const updated = getTimeLeft();
 
-      // 🔥 If already passed before load
-      if (diff <= 0 && finalSeconds === null) {
+      // 🔥 Already passed before load
+      if (!updated && finalSeconds === null) {
         setFinalSeconds(5);
         return;
       }
 
-      // 🔥 Enter final 3 seconds
-      if (diff <= 3000 && diff > 0 && finalSeconds === null) {
+      // 💓 Heartbeat starts at <= 5 sec
+      if (updated?.total <= 5000 && updated?.total > 0) {
+        audioRef.current?.play().catch(() => {});
+      }
+
+      // 🔥 Enter cinematic final countdown
+      if (
+        updated?.total <= 3000 &&
+        updated?.total > 0 &&
+        finalSeconds === null
+      ) {
         setFinalSeconds(5);
+        setShake(true);
         return;
       }
 
@@ -56,16 +81,14 @@ const CountdownCard = ({ onFinish }) => {
             return 0;
           }
 
-          // 💓 heartbeat
+          // 💓 heartbeat pulse
           if (audioRef.current) {
             audioRef.current.currentTime = 0;
             audioRef.current.play().catch(() => {});
           }
 
-          // 📳 vibration
-          if (navigator.vibrate) {
-            navigator.vibrate(120);
-          }
+          // 📳 vibration pulse
+          navigator.vibrate?.([50, 50, 50]);
 
           return prev - 1;
         });
@@ -74,10 +97,9 @@ const CountdownCard = ({ onFinish }) => {
       }
 
       // ⏳ NORMAL COUNTDOWN
-      if (diff > 0) {
-        setTimeLeft(diff);
+      if (updated) {
+        setTimeLeft(updated);
       }
-
     }, 1000);
 
     return () => clearInterval(intervalRef.current);
@@ -85,57 +107,72 @@ const CountdownCard = ({ onFinish }) => {
 
   return (
     <Card buttonText="I can't wait 😏">
-      <audio ref={audioRef} src="/heartbeat.mp3" />
+      {/* 💓 heartbeat audio */}
+      <audio ref={audioRef} src="/heartbeat.mp3" preload="auto" />
 
-      <div className="w-[90%] h-[50%] flex flex-col items-center justify-center text-center relative floaty">
-        <div className="absolute inset-0 blur-2xl  p-8 bg-red-600" />
+      <div
+        className={`w-[90%] h-[50%] flex flex-col items-center justify-center text-center relative floaty ${
+          shake ? "animate-pulse" : ""
+        }`}
+      >
+        {/* 💖 glowing bg */}
+        <div className="absolute inset-0 blur-2xl p-8 bg-red-600 h-[420px]" />
 
         <div className="relative z-10 w-[90%] flex flex-col items-center gap-5">
+          {/* 💬 TEXT */}
+          <p
+            className={
+              isFinished
+                ? "text-white text-2xl font-bold  animate-pulse "
+                : "text-white "
+            }
+          >
+            {isFinished
+              ? "OMG IT'S THE TIME! 🎉"
+              : finalSeconds !== null
+              ? "Are you ready princess? 😃"
+              : "Heyy beautiful 😙, something special is waiting for you 💕"}
+          </p>
 
-          {/* 💥 TEXT */}
-      
-<p className={
-  isFinished
-    ? "text-white text-2xl font-bold animate-pulse glow-text2"
-    : "text-pink-200 glow-text2"
-}>
-  {isFinished
-    ? "OMG IT'S THE TIME! 🎉"
-    : finalSeconds !== null 
-      ? "Are you ready princess? 😃" // Shows when count.gif is active
-      : "Heyy beautiful 😙, something special is waiting for you 💕"}
-</p>
           {/* 🎞 GIF */}
           <img
             src={currentGif}
             alt=""
-            className="w-40 drop-shadow-2xl floaty gif-shadow-romantic "
+            className="w-40 drop-shadow-2xl floaty gif-shadow-romantic"
           />
 
-          {/* 💥 FINAL 3 SEC */}
+          {/* 💥 FINAL COUNTDOWN */}
           {finalSeconds !== null && (
-            <h1 className="text-white text-4xl font-bold">
+            <h1 className="text-white text-4xl font-bold glow-text">
               {finalSeconds || ""}
             </h1>
           )}
 
           {/* ⏳ NORMAL COUNTDOWN */}
-          {finalSeconds === null && timeLeft > 0 && (
+          {finalSeconds === null && timeLeft && (
             <div className="grid grid-cols-4 gap-3 w-full">
-              {TIME_UNITS.map(({ label, ms }, i) => {
-                const prev = TIME_UNITS[i - 1]?.ms ?? Infinity;
-                const value = Math.floor((timeLeft % prev) / ms);
+              {TIME_UNITS.map(({ label }, i) => {
+                const values = [
+                  timeLeft.days,
+                  timeLeft.hours,
+                  timeLeft.minutes,
+                  timeLeft.seconds,
+                ];
 
                 return (
                   <div key={label} className={BOX_CLASS}>
-                    <span className="text-white glow-text">{value}</span>
-                    <span className="text-xs text-white/70 glow-text">{label}</span>
+                    <span className="text-white glow-text2">
+                      {values[i]}
+                    </span>
+
+                    <span className="text-xs text-white/70 glow-text2">
+                      {label}
+                    </span>
                   </div>
                 );
               })}
             </div>
           )}
-
         </div>
       </div>
     </Card>
