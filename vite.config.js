@@ -8,6 +8,7 @@ export default defineConfig({
     extend: {
       fontFamily: {
         poppins: ['Poppins', 'sans-serif'],
+        handwritten: ['"Lugrasimo"', 'cursive'],
        
       },
     },

@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /* =========================
-   YOUR EXISTING DESIGN TOKENS (UNCHANGED)
+   APPLE-STYLE FONT SYSTEM
 ========================= */
 
 :root {
@@ -14,21 +14,39 @@
   --accent-bg: rgba(170, 59, 255, 0.1);
   --accent-border: rgba(170, 59, 255, 0.5);
   --social-bg: rgba(244, 243, 236, 0.5);
+
   --shadow:
     rgba(0, 0, 0, 0.1) 0 10px 15px -3px,
     rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --sans:
+    -apple-system,
+    BlinkMacSystemFont,
+    "SF Pro Display",
+    "SF Pro Text",
+    "Helvetica Neue",
+    sans-serif;
+
+  --heading:
+    -apple-system,
+    BlinkMacSystemFont,
+    "SF Pro Display",
+    "Helvetica Neue",
+    sans-serif;
+
   --mono: ui-monospace, Consolas, monospace;
 
   font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
+
+  letter-spacing: -0.2px;
   color: var(--text);
   background: var(--bg);
 }
 
-/* Dark mode (kept but simplified usage) */
+/* =========================
+   DARK MODE
+========================= */
+
 @media (prefers-color-scheme: dark) {
   :root {
     --text: #9ca3af;
@@ -43,7 +61,7 @@
 }
 
 /* =========================
-   CLEAN BASE RESET (SIMPLIFIED)
+   RESET
 ========================= */
 
 * {
@@ -55,25 +73,36 @@
 body {
   min-height: 100vh;
   overflow-x: hidden;
-font-family: 'Playwrite US Modern', serif;
-  letter-spacing: 0.5px;
+
+  font-family: var(--sans);
+
+  letter-spacing: -0.3px;
+
+  background: #fff5f7;
+
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* REMOVE fixed width layout (not needed for your card UI) */
+/* =========================
+   ROOT
+========================= */
+
 #root {
   width: 100%;
   min-height: 100vh;
+
   display: flex;
   flex-direction: column;
 }
 
 /* =========================
-   TYPOGRAPHY (KEEP + CLEAN)
+   TYPOGRAPHY
 ========================= */
 
 h1,
-h2 {
+h2,
+h3 {
   font-family: var(--heading);
   font-weight: 500;
   color: var(--text-h);
@@ -84,23 +113,49 @@ p {
 }
 
 /* =========================
-   ✨ NEW ADDITIONS (FOR YOUR PROJECT)
+   APPLE HELLO TEXT
 ========================= */
 
-/* 💎 GLASS EFFECT (for countdown + cards) */
+.apple-hello {
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "SF Pro Display",
+    sans-serif;
+
+  font-weight: 300;
+
+  letter-spacing: -1.8px;
+
+  line-height: 1.02;
+}
+
+/* =========================
+   GLASS
+========================= */
+
 .glass {
   background: rgba(255, 255, 255, 0.12);
+
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
+
   border: 1px solid var(--border);
+
   border-radius: 20px;
+
   box-shadow: var(--shadow);
 }
+
+/* =========================
+   FLOATY
+========================= */
 
 @keyframes floaty {
   0%, 100% {
     transform: translateY(0px) scale(1);
   }
+
   50% {
     transform: translateY(-12px) scale(1.02);
   }
@@ -110,12 +165,16 @@ p {
   animation: floaty 3s ease-in-out infinite;
 }
 
-/* ✨ FADE IN (for card transitions) */
+/* =========================
+   FADE
+========================= */
+
 @keyframes fadeIn {
   from {
     opacity: 0;
     transform: scale(0.98);
   }
+
   to {
     opacity: 1;
     transform: scale(1);
@@ -126,12 +185,18 @@ p {
   animation: fadeIn 0.5s ease-out;
 }
 
-/* 💖 SOFT GLOW ACCENT */
+/* =========================
+   GLOW
+========================= */
+
 .glow {
   box-shadow: 0 0 25px var(--accent-bg);
 }
 
-/* 🎴 CARD SMOOTH TRANSITION HELPERS */
+/* =========================
+   CARD TRANSITION
+========================= */
+
 .card-enter {
   opacity: 0;
   transform: translateX(40px);
@@ -140,11 +205,12 @@ p {
 .card-enter-active {
   opacity: 1;
   transform: translateX(0);
+
   transition: all 0.4s ease;
 }
 
 /* =========================
-   OPTIONAL NICE TOUCH (SCROLLBAR)
+   SCROLLBAR
 ========================= */
 
 ::-webkit-scrollbar {
@@ -159,13 +225,22 @@ p {
 ::-webkit-scrollbar-track {
   background: transparent;
 }
+
+/* =========================
+   SURPRISE CONTAINER
+========================= */
+
 .surprise-container {
   position: fixed;
+
   bottom: -100%;
   left: 0;
+
   width: 100%;
   height: 100vh;
-  background: black;
+
+  background: transparent;
+
   color: white;
 
   display: flex;
@@ -180,6 +255,11 @@ p {
     bottom: 0;
   }
 }
+
+/* =========================
+   RUMBLE
+========================= */
+
 @keyframes rumble {
   0% { transform: translate(0px, 0px) rotate(0deg); }
   10% { transform: translate(-2px, 2px) rotate(-0.5deg); }
@@ -197,7 +277,11 @@ p {
 .rumble {
   animation: rumble 0.15s infinite;
 }
-/* RUMBLE */
+
+/* =========================
+   HARD RUMBLE
+========================= */
+
 @keyframes rumble-hard {
   0% { transform: translate(0,0) scale(1); }
   20% { transform: translate(-5px,4px) scale(1.01); }
@@ -206,110 +290,140 @@ p {
   80% { transform: translate(5px,3px) scale(0.98); }
   100% { transform: translate(0,0) scale(1); }
 }
-.rumble-hard { animation: rumble-hard 0.08s infinite; }
 
-/* WHITE FLASH */
+.rumble-hard {
+  animation: rumble-hard 0.08s infinite;
+}
+
+/* =========================
+   FLASH
+========================= */
+
 .flash {
   position: fixed;
   inset: 0;
+
   background: white;
+
   z-index: 9999;
+
   animation: flashAnim 0.4s ease-out forwards;
 }
+
 @keyframes flashAnim {
   0% { opacity: 1; }
   100% { opacity: 0; }
 }
 
-/* BLUR FOCUS */
+/* =========================
+   BLUR
+========================= */
+
 .blur-zoom {
   filter: blur(8px);
+
   transform: scale(1.05);
+
   transition: all 0.6s ease;
 }
+
 .clear-focus {
   filter: blur(0);
   transform: scale(1);
 }
-.typing {
-  width: fit-content;
-  white-space: nowrap;
-  overflow: hidden;
-  border-right: 2px solid white;
-  animation: typing 3s steps(40) infinite, blink 0.7s infinite;
-}
 
-@keyframes typing {
-  0% { width: 0 }
-  50% { width: 100% }
-  100% { width: 0 }
-}
+/* =========================
+   GLOW TEXT
+========================= */
 
-@keyframes blink {
-  50% { border-color: transparent }
-}
 .glow-text {
-  /* Rich Berry color for the actual text */
-  color: #9d174d; 
+  color: #9d174d;
+
   font-weight: 700;
-  
+
   text-shadow:
-    /* Layer 1: Tight White Glow (Keeps the font crisp) */
     0 0 4px rgba(255, 255, 255, 0.8),
-    
-    /* Layer 2: The Inner Neon (The pink vibe) */
-    0 0 12px rgba(236, 72, 153, 0.6), 
-    
-    /* Layer 3: The Blurry Backdrop Haze (Very wide spread) */
-    0 0 35px rgba(190, 24, 93, 0.3), 
-    
-    /* Layer 4: The Bottom Shadow (Provides depth/dimension) */
+    0 0 12px rgba(236, 72, 153, 0.6),
+    0 0 35px rgba(190, 24, 93, 0.3),
     2px 4px 10px rgba(88, 28, 135, 0.2);
 
-  /* Essential for the handwritten look */
   line-height: 1.5;
 }
-.round-top-text {
-  display: inline-block;
-  padding: 10px 16px;
 
-  border-top-left-radius: 20px;
-  border-top-right-radius: 20px;
+/* =========================
+   GLOW TEXT 2
+========================= */
 
-  background: rgba(255, 192, 203, 0.3);
-  color: white;
+.glow-text2 {
+  color: #ffffff;
+
+  text-shadow:
+    0 0 6px rgba(250, 137, 154, 0.6),
+    0 0 12px rgba(253, 75, 164, 0.5),
+    0 0 20px rgba(199, 8, 110, 0.35),
+    0 0 30px rgba(59, 49, 49, 0.834);
 }
-@import url('https://fonts.googleapis.com/css2?family=Bad+Script&family=Playwrite+NZ+Basic:wght@100..400&family=Playwrite+US+Modern:wght@100..400&display=swap');
-romantic-text {
-  font-family: 'Playwrite US Modern', serif;
-}
-.title-text {
-  font-family: 'Playfair Display', serif;
-}
+
+/* =========================
+   GIF SHADOW
+========================= */
+
 .gif-shadow-romantic {
-  filter: 
+  filter:
     drop-shadow(0 10px 20px rgba(0, 0, 0, 0.2))
     drop-shadow(0 0 6px rgba(127, 2, 64, 0.4));
 }
+
+/* =========================
+   BEND
+========================= */
+
 .bend-text {
   display: inline-block;
+
   transform: perspective(400px) rotateX(15deg);
+
   transform-origin: bottom;
 }
-.glow-text2 {
 
-color: #ffffff;
+/* =========================
+   SINGLE CURSOR TYPE EFFECT
+========================= */
 
+.typing-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 
+  width: fit-content;
 
-text-shadow:
+  position: relative;
+}
 
-0 0 6px rgba(250, 137, 154, 0.6), /* soft pink glow */
+.line-text {
+  display: inline-block;
 
-0 0 12px rgba(253, 75, 164, 0.5), /* medium pink */
+  overflow: hidden;
+  white-space: nowrap;
 
-0 0 20px rgba(199, 8, 110, 0.35), /* deeper romantic pink */
+  position: relative;
+}
 
-0 0 30px rgba(59, 49, 49, 0.834); /* soft dreamy haze */
+.cursor {
+  width: 2px;
+  height: 1.1em;
 
+  background: #c2185b;
+
+  margin-left: 4px;
+
+  border-radius: 999px;
+
+  animation: blink 0.8s step-end infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
 }

@@ -1,7 +1,7 @@
 import Card from "./Card";
 import { useEffect, useRef, useState } from "react";
 
-const TARGET_DATE = "2026-05-13T04:00:00";
+const TARGET_DATE = "2026-05-07T15:21:00";
 
 const TIME_UNITS = [
   { label: "Days", ms: 1000 * 60 * 60 * 24 },
@@ -143,7 +143,7 @@ const CountdownCard = ({ onFinish }) => {
 
           {/* 💥 FINAL COUNTDOWN */}
           {finalSeconds !== null && (
-            <h1 className="text-white text-4xl font-bold glow-text">
+            <h1 className="text-white text-4xl font-bold ">
               {finalSeconds || ""}
             </h1>
           )}

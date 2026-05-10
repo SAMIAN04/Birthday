@@ -4,35 +4,39 @@ import SurpriseContent from "./components/SurpriseContent";
 import confetti from "canvas-confetti";
 
 function App() {
-  const [stage, setStage] = useState("loading"); 
-  // loading → start → countdown → surprise
-
-  const [rumble, setRumble] = useState(false);
+  const [stage, setStage] = useState("loading");
   const [isReady, setIsReady] = useState(false);
+  const [rumble, setRumble] = useState(false);
+  const [percent, setPercent] = useState(0); // Progress tracker
 
   const bassRef = useRef(null);
   const heartbeatRef = useRef(null);
 
-  // 💥 PRELOAD + CINEMATIC LOADING
   useEffect(() => {
+    // 1. LIST EVERY ASSET: Include all photos from your SurpriseContent here!
     const assets = [
       "/wait.gif",
       "/excited.gif",
       "/heartbeat.mp3",
-      "/bass.mp3",
+      "/happy.mp3",
+      // Add all your slider images here so they don't "pop in" later
+      "/photo1.jpg", 
+      "/photo2.jpg",
+      "/photo3.jpg"
     ];
 
-    let loaded = 0;
+    let loadedCount = 0;
 
-    const checkDone = () => {
-      loaded++;
-      if (loaded === assets.length) {
-        setIsReady(true);
+    const updateProgress = () => {
+      loadedCount++;
+      const p = Math.floor((loadedCount / assets.length) * 100);
+      setPercent(p);
 
-        // 🎬 small cinematic delay before showing start
+      if (loadedCount === assets.length) {
         setTimeout(() => {
+          setIsReady(true);
           setStage("start");
-        }, 1500);
+        }, 1200); // Gentle delay for cinematic feel
       }
     };
 
@@ -40,16 +44,18 @@ function App() {
       if (src.endsWith(".mp3")) {
         const audio = new Audio();
         audio.src = src;
-        audio.oncanplaythrough = checkDone;
+        audio.oncanplaythrough = updateProgress;
+        audio.load(); // Force browser to start downloading
       } else {
         const img = new Image();
         img.src = src;
-        img.onload = checkDone;
+        img.onload = updateProgress;
+        img.onerror = updateProgress; // Don't get stuck if an image fails
       }
     });
   }, []);
 
-  // 💓 heartbeat during loading (cinematic)
+  // Sync heartbeat with loading
   useEffect(() => {
     if (stage === "loading" && heartbeatRef.current) {
       heartbeatRef.current.play().catch(() => {});
@@ -57,109 +63,59 @@ function App() {
   }, [stage]);
 
   const unlockEverything = () => {
-    if (navigator.vibrate) {
-      navigator.vibrate(1);
-    }
-
+    if (heartbeatRef.current) heartbeatRef.current.pause();
+    // Start background music immediately when she clicks
     if (bassRef.current) {
-      bassRef.current.play().then(() => {
-        bassRef.current.pause();
-        bassRef.current.currentTime = 0;
-      }).catch(() => {});
+      bassRef.current.play().catch(() => {});
     }
-
-    if (heartbeatRef.current) {
-      heartbeatRef.current.pause();
-      heartbeatRef.current.currentTime = 0;
-    }
-
     setStage("countdown");
   };
 
-  const triggerFakeVibration = () => {
-    setRumble(true);
-
-    let count = 0;
-    const interval = setInterval(() => {
-      if (bassRef.current) {
-        bassRef.current.currentTime = 0;
-        bassRef.current.play().catch(() => {});
-      }
-
-      if (navigator.vibrate) {
-        navigator.vibrate(80);
-      }
-
-      count++;
-      if (count > 8) clearInterval(interval);
-    }, 100);
-  };
-
   const handleFinish = () => {
-    triggerFakeVibration();
-
+    setRumble(true);
+    // Fake vibration/rumble effect
     setTimeout(() => {
-      confetti({
-        particleCount: 300,
-        spread: 160,
-        startVelocity: 45,
-      });
-
+      confetti({ particleCount: 300, spread: 160 });
       setRumble(false);
       setStage("surprise");
     }, 1000);
   };
 
   return (
-    <div className={`min-h-screen flex items-center justify-center bg-fuchsia-100 font-poppins italic ${
+    <div className={`min-h-screen flex items-center justify-center bg-fuchsia-100 font-poppins italic transition-all duration-700 ${
       rumble ? "rumble-hard" : ""
     }`}>
-
-      {/* 🔊 AUDIO */}
-      <audio ref={bassRef} src="/happy.mp3" />
+      
+      <audio ref={bassRef} src="/happy.mp3" loop />
       <audio ref={heartbeatRef} src="/heartbeat.mp3" loop />
 
-      {/* 🎬 LOADING SCREEN */}
       {stage === "loading" && (
-        <div className="flex flex-col items-center gap-6 w-[80%] text-center">
-          <p className="text-xl glow-text animate-pulse">
-            Preparing something special for you 💕
+        <div className="flex flex-col items-center gap-6">
+          <div className="relative">
+            <div className="w-20 h-20 bg-pink-400 rounded-full animate-ping opacity-20"></div>
+            <div className="absolute inset-0 flex items-center justify-center font-bold text-pink-600">
+              {percent}%
+            </div>
+          </div>
+          <p className=" glow-text text-lg font-medium animate-pulse">
+            Getting things ready for you...
           </p>
-
-          {/* 💓 pulsing heart synced vibe */}
-          <div className="w-16 h-16 bg-pink-400 rounded-full animate-ping"></div>
         </div>
       )}
 
-      {/* 💖 START SCREEN */}
       {stage === "start" && (
-        <div className="text-center w-[80%] gap-6 flex flex-col items-center justify-center">
-          <button
-            onClick={unlockEverything}
-            className="bg-transparent border-none p-0 cursor-pointer active:scale-95 transition"
-          >
-            <img
-              src="/excited.gif"
-              alt="Start"
-              className="w-40 drop-shadow-2xl "
-            />
+        <div className="text-center flex flex-col items-center gap-6">
+          <button onClick={unlockEverything} className="active:scale-90 transition-transform">
+            <img src="/excited.gif" alt="Start" className="w-44 drop-shadow-2xl" />
           </button>
-
-          <p className="font-bold text-lg glow-text text-gray-400">
+          <p className="glow-text font-bold tracking-wide">
             click on my tummy 😛
           </p>
         </div>
       )}
 
-      {/* ⏳ COUNTDOWN */}
-      {stage === "countdown" && (
-        <CountdownCard onFinish={handleFinish} />
-      )}
-
-      {/* 🎉 SURPRISE */}
-      {stage === "surprise" && (
-        <SurpriseContent />
-      )}
+      {stage === "countdown" && <CountdownCard onFinish={handleFinish} />}
+      {stage === "surprise" && <SurpriseContent />}
     </div>
   );
 }

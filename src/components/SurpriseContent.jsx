@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
+import Latter from "./Latter";
 
 const slides = [
   {
@@ -33,10 +34,10 @@ export default function SurpriseContent() {
   const [gif, setGif] = useState("/happy.gif");
   const [index, setIndex] = useState(0);
   const [typed, setTyped] = useState("");
-  
+
   const typingIdx = useRef(0);
   const autoNextTimer = useRef(null);
-  const audioRef = useRef(null); 
+  const audioRef = useRef(null);
 
   const current = slides[index];
   const isRight = index % 2 === 0;
@@ -86,7 +87,7 @@ export default function SurpriseContent() {
     setTyped("");
     typingIdx.current = 0;
     if (autoNextTimer.current) clearTimeout(autoNextTimer.current);
-    
+
     const textToType = current.text;
     const interval = setInterval(() => {
       if (typingIdx.current < textToType.length) {
@@ -97,7 +98,7 @@ export default function SurpriseContent() {
         // Wait 1.5 seconds after typing finishes for extra reading time before flipping slides
         autoNextTimer.current = setTimeout(() => {
           nextSlide();
-        }, 1500); 
+        }, 1500);
       }
     }, 100); // 🟢 Slower typing speed (100ms per character for readable pacing)
 
@@ -117,7 +118,7 @@ export default function SurpriseContent() {
 
   return (
     <motion.div className="fixed inset-0 bg-pink-100/10 z-50 overflow-hidden flex justify-center">
-      
+
       <AnimatePresence>
         {stage === "story" && (
           <motion.div
@@ -135,7 +136,7 @@ export default function SurpriseContent() {
 
       <AnimatePresence mode="wait">
         {(stage === "intro" || stage === "gift") && (
-          <motion.div 
+          <motion.div
             key="gift-stage"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -150,145 +151,306 @@ export default function SurpriseContent() {
               onClick={stage === "gift" ? startStory : undefined}
             />
             <p className="glow-text font-bold text-center px-4">
-              {stage === "gift" ? "Click on the gift birthday Girl 😘" : "I have somthing more for you....😉"}
+              {stage === "gift" ? "click on the misterybox birthday girl 😘" : "I have somthing more for you....😉"}
             </p>
           </motion.div>
         )}
 
         {stage === "story" && (
+         <motion.div
+  key="story-stage"
+  initial={{ opacity: 0 }}
+  animate={{ opacity: 1 }}
+  exit={{ opacity: 0 }}
+  className="relative z-10 w-[96%] h-full overflow-hidden"
+  onClick={nextSlide}
+>
+  {/* 💖 FLOATING EMOJIS BACKGROUND */}
+  {["💖", "✨", "🎀", "💞", "🌸", "💕", "🥺"].map((emoji, i) => (
+    <motion.div
+      key={i}
+      initial={{
+        y: "110vh",
+        x: `${10 + (i * 12)}vw`,
+        opacity: 0,
+        scale: 0.8,
+      }}
+      animate={{
+        y: "-20vh",
+        opacity: [0, 0.4, 0.25, 0],
+        x: [
+          `${10 + (i * 12)}vw`,
+          `${12 + (i * 12)}vw`,
+          `${8 + (i * 12)}vw`,
+        ],
+      }}
+      transition={{
+        duration: 10 + i * 2,
+        repeat: Infinity,
+        delay: i * 0.8,
+        ease: "linear",
+      }}
+      className="absolute text-3xl pointer-events-none select-none"
+      style={{
+        filter: "blur(0.2px)",
+      }}
+    >
+      {emoji}
+    </motion.div>
+  ))}
+
+  {/* 📸 PHOTO */}
+  <motion.div
+  key={current.img}
+  initial={{
+    opacity: 0,
+    scale: 0.85,
+    rotate: isRight ? -6 : 6,
+    y: 60,
+  }}
+  animate={{
+    opacity: 1,
+    scale: 1,
+    rotate: isRight ? -3 : 3,
+    y: 0,
+  }}
+  transition={{
+    type: "spring",
+    stiffness: 80,
+    damping: 16,
+  }}
+  className={`
+    absolute
+    ${isRight ? "right-5 top-14" : "left-5 top-14"}
+  `}
+>
+  {/* 🌸 Outer Glow Layer (emotion pull) */}
+  <div className="absolute inset-0 scale-105 blur-2xl bg-pink-300/20 rounded-2xl" />
+
+  {/* 📸 Main Polaroid Frame */}
+  <div
+    className="
+      relative
+      bg-[#fffafc]
+      p-3
+      pb-14
+      rounded-[10px]
+      shadow-[0_25px_60px_rgba(0,0,0,0.25)]
+      border border-white/60
+      rotate-[1deg]
+    "
+  >
+    {/* 📷 Image */}
+    <img
+      src={current.img}
+      alt=""
+      className="
+        w-60
+        h-[24rem]
+        object-cover
+        rounded-[6px]
+        grayscale-[0.05]
+        contrast-105
+      "
+    />
+
+    {/* 🩹 Tape (psychological “real memory” cue) */}
+    <div className="absolute top-[-12px] left-1/2 -translate-x-1/2 w-16 h-5 bg-pink-100/70 rotate-[-3deg] shadow-sm" />
+
+    {/* ✨ subtle bottom glow */}
+    <div className="absolute bottom-2 left-0 right-0 text-center text-xs text-pink-400/60 font-light">
+      memory
+    </div>
+  </div>
+</motion.div>
+
+  {/* ✨ TEXT */}
+ <motion.div
+  key={current.text}
+  initial={{ opacity: 0, y: 30, filter: "blur(8px)" }}
+  animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+  transition={{
+    duration: 0.8,
+    ease: [0.22, 1, 0.36, 1],
+  }}
+  className={`
+    absolute
+    bottom-24
+    z-20
+    w-full
+    px-7
+    flex
+    ${isRight ? "justify-start" : "justify-end"}
+  `}
+>
+  <div
+    className="
+      max-w-[85%]
+      text-white
+      text-[22px]
+      md:text-[26px]
+      font-medium
+      leading-[1.45]
+      tracking-[-0.02em]
+      backdrop-blur-[2px]
+      drop-shadow-[0_4px_25px_rgba(0,0,0,0.28)]
+      
+    "
+    style={{
+      textShadow: `
+        0 2px 10px rgba(0,0,0,0.28),
+        0 0 20px rgba(255,255,255,0.08)
+      `
+    }}
+  >
+    {typed}
+
+    <motion.span
+      animate={{ opacity: [0, 1, 0] }}
+      transition={{
+        repeat: Infinity,
+        duration: 1,
+      }}
+      className="inline-block ml-[2px] text-pink-100"
+    >
+      |
+    </motion.span>
+  </div>
+</motion.div>
+</motion.div>
+        )}
+
+        {/* 💖 FINAL STAGE 1 */}
+        {stage === "final1" && (
           <motion.div
-            key="story-stage"
+            key="final1-stage"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="relative z-10 w-[90%] h-full"
-            onClick={nextSlide}
+            transition={{ duration: 0.5 }}
+            className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 z-10"
           >
-            <motion.img
-              key={current.img}
-              src={current.img}
-              initial={{ opacity: 0, scale: 0.8, rotate: isRight ? -5 : 5, y: 50 }}
-              animate={{ opacity: 1, scale: 1, rotate: 0, y: 0 }}
-              transition={{ type: "spring", stiffness: 100, damping: 15 }} 
-              className={`absolute w-56 h-96 object-cover rounded-2xl border-4 border-white/30 shadow-2xl  ${
-                isRight ? "right-4 top-16" : "left-4 top-12"
-              }`}
+            {/* ✨ PRELOAD HIDDEN GIF */}
+            <img
+              src="/love.gif"
+              alt=""
+              className="hidden"
+              loading="eager"
+              decoding="async"
             />
-            
-            <motion.div 
-              key={current.text}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className={` w-full absolute px-1 glow-text2 text-2xl drop-shadow-2xl leading-tight ${
-                isRight ? "bottom-32 text-left" : "bottom-32 text-right"
-              }`}
+
+            <motion.h2
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.1, duration: 0.5 }}
+              className="glow-text text-xl mb-4"
             >
-              {typed}
-              <motion.span 
-                animate={{ opacity: [0, 1, 0] }} 
-                transition={{ repeat: Infinity, duration: 0.8 }}
-              >|</motion.span>
-            </motion.div>
+              Here is a kinder for you my crazy little babygirl 😚
+            </motion.h2>
+
+            <motion.img
+              src="/kinder.gif"
+              alt="kinder joy surprise"
+              loading="eager"
+              decoding="async"
+              initial={{ scale: 0.85, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{
+                duration: 0.6,
+                ease: "easeOut",
+              }}
+              className="w-64 gif-shadow-romantic will-change-transform"
+            />
           </motion.div>
         )}
 
-     {/* 💖 FINAL STAGE 1 */}
-{stage === "final1" && (
-  <motion.div
-    key="final1-stage"
-    initial={{ opacity: 0 }}
-    animate={{ opacity: 1 }}
-    exit={{ opacity: 0 }}
-    transition={{ duration: 0.5 }}
-    className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 z-10"
-  >
-    {/* ✨ PRELOAD HIDDEN GIF */}
-    <img
-      src="/love.gif"
-      alt=""
-      className="hidden"
-      loading="eager"
-      decoding="async"
-    />
+        {/* 💖 FINAL STAGE 2 */}
+        {stage === "final2" && (
+          <motion.div
+            key="final2-stage"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="fixed inset-0 z-50 flex items-center justify-center overflow-hidden"
+          >
+            <div className="relative w-full max-w-[440px] h-[600px] flex items-center justify-center">
 
-    <motion.h2
-      initial={{ y: 20, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ delay: 0.1, duration: 0.5 }}
-      className="glow-text text-2xl mb-4"
-    >
-      Here is a kinder for you my crazy little babygirl 😚
-    </motion.h2>
+              {/* 💌 ENVELOPE - Scales small and fades behind the letter */}
+              <motion.div
+                animate={{
+                  scale: [1, 1, 0.4],
+                  opacity: [1, 1, 0],
+                  y: [0, 0, 100],
+                }}
+                transition={{
+                  delay: 2.2, // Starts right after letter is fully "out"
+                  duration: 1.5,
+                  ease: "backIn"
+                }}
+                className="absolute w-[380px] h-[260px] z-10"
+              >
+                <div className="absolute inset-0 bg-[#f9c9d9] rounded-xl shadow-lg" />
 
-    <motion.img
-      src="/kinder.gif"
-      alt="kinder joy surprise"
-      loading="eager"
-      decoding="async"
-      initial={{ scale: 0.85, opacity: 0 }}
-      animate={{ scale: 1, opacity: 1 }}
-      transition={{
-        duration: 0.6,
-        ease: "easeOut",
-      }}
-      className="w-64 gif-shadow-romantic will-change-transform"
-    />
-  </motion.div>
-)}
+                {/* Flap */}
+                <motion.div
+                  initial={{ rotateX: 0 }}
+                  animate={{ rotateX: 160 }}
+                  transition={{ delay: 0.5, duration: 1 }}
+                  style={{ transformOrigin: "top", transformStyle: "preserve-3d" }}
+                  className="absolute top-0 left-0 w-full h-full z-30"
+                >
+                  <div className="w-full h-full bg-pink-300 [clip-path:polygon(0%_0%,50%_50%,100%_0%)]" />
+                </motion.div>
 
-{/* 💖 FINAL STAGE 2 */}
-{stage === "final2" && (
-  <motion.div
-    key="final2-stage"
-    initial={{ opacity: 0 }}
-    animate={{ opacity: 1 }}
-    exit={{ opacity: 0 }}
-    transition={{ duration: 0.45 }}
-    className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 z-10"
-  >
-    <motion.h2
-      initial={{ y: 25, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{
-        duration: 0.55,
-        ease: "easeOut",
-      }}
-      className="glow-text text-xl mt-8 font-black drop-shadow-xl tracking-tight bend-text"
-    >
-      I LOVE YOU SO MUCH MY PRETTY PRINCESS 💖
-    </motion.h2>
+                {/* Fold Geometry */}
+                <div className="absolute inset-0 z-20">
+                  <div className="absolute inset-0 bg-[#fbcfe8] [clip-path:polygon(0%_0%,45%_50%,0%_100%)]" />
+                  <div className="absolute inset-0 bg-[#fbcfe8] [clip-path:polygon(100%_0%,55%_50%,100%_100%)]" />
+                  <div className="absolute inset-0 bg-[#f9c9d9] [clip-path:polygon(0%_100%,50%_45%,100%_100%)] shadow-inner" />
+                </div>
+              </motion.div>
 
-    <motion.img
-      src="/love.gif"
-      alt="love"
-      loading="eager"
-      decoding="async"
-      initial={{ scale: 0.9, opacity: 0 }}
-      animate={{ scale: 1, opacity: 1 }}
-      transition={{
-        delay: 0.15,
-        duration: 0.6,
-        ease: "easeOut",
-      }}
-      className="w-80 drop-shadow-2xl gif-shadow-romantic will-change-transform"
-    />
+              {/* 📄 THE LETTER - Centers and types out text */}
+              <motion.div
+                initial={{ y: 50, scale: 0.8, opacity: 0 }}
+                animate={{ y: 0, scale: 1, opacity: 1 }}
+                transition={{
+                  delay: 1.2,
+                  duration: 1.2,
+                  ease: [0.34, 1.3, 0.64, 1]
+                }}
+                className="
+          relative
+          z-40
+          w-[90vw]
+          max-w-[400px]
+          h-[580px]
+          bg-[#fffefb]
+          rounded-sm
+          shadow-[0_20px_60px_rgba(0,0,0,0.12)]
+          border border-[#f0e6d6]
+          px-8 py-12
+          flex flex-col items-center
+        "
+              >
+                {/* Subtle Paper Texture Overlay */}
+                <div className="absolute inset-0 opacity-[0.03] bg-[url('https://www.transparenttextures.com/patterns/paper-fibers.png')] pointer-events-none" />
 
-    <motion.p
-      initial={{ opacity: 0, y: 15 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{
-        delay: 0.3,
-        duration: 0.5,
-      }}
-      className="glow-text font-bold text-xl px-4 leading-relaxed w-[90%]"
-    >
-      Thank you for being the best part of my life.
-      May your day be as beautiful as your smile.
-      Happy Birthday my love of life! 🎂✨
-    </motion.p>
-  </motion.div>
-)}
+                
+                <motion.div
+                  initial={{ scale: 0, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ delay: 3.2, type: "spring", damping: 12 }}
+                  className="mb-8 flex items-center justify-center flex-col gap-6"
+                >
+                  <img src="/love.gif" className="w-40 h-36 object-cover rounded-2xl rotate-2 " />
+                   <Latter/> 
+                </motion.div>
+
+              </motion.div>
+
+            </div>
+          </motion.div>
+        )}
       </AnimatePresence>
     </motion.div>
   );
