@@ -1,7 +1,7 @@
 import Card from "./Card";
 import { useEffect, useRef, useState } from "react";
 
-const TARGET_DATE = "2026-05-07T15:21:00";
+const TARGET_DATE = "2026-05-13T00:00:00";
 
 const TIME_UNITS = [
   { label: "Days", ms: 1000 * 60 * 60 * 24 },
@@ -52,12 +52,12 @@ const CountdownCard = ({ onFinish }) => {
 
       // 🔥 Already passed before load
       if (!updated && finalSeconds === null) {
-        setFinalSeconds(5);
+        setFinalSeconds(3);
         return;
       }
 
       // 💓 Heartbeat starts at <= 5 sec
-      if (updated?.total <= 5000 && updated?.total > 0) {
+      if (updated?.total <= 3000 && updated?.total > 0) {
         audioRef.current?.play().catch(() => {});
       }
 
