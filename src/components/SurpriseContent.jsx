@@ -156,171 +156,104 @@ export default function SurpriseContent() {
           </motion.div>
         )}
 
-        {stage === "story" && (
-         <motion.div
-  key="story-stage"
-  initial={{ opacity: 0 }}
-  animate={{ opacity: 1 }}
-  exit={{ opacity: 0 }}
-  className="relative z-10 w-[96%] h-full overflow-hidden"
-  onClick={nextSlide}
->
-  {/* 💖 FLOATING EMOJIS BACKGROUND */}
-  {["💖", "✨", "🎀", "💞", "🌸", "💕", "🥺"].map((emoji, i) => (
-    <motion.div
-      key={i}
-      initial={{
-        y: "110vh",
-        x: `${10 + (i * 12)}vw`,
-        opacity: 0,
-        scale: 0.8,
-      }}
-      animate={{
-        y: "-20vh",
-        opacity: [0, 0.4, 0.25, 0],
-        x: [
-          `${10 + (i * 12)}vw`,
-          `${12 + (i * 12)}vw`,
-          `${8 + (i * 12)}vw`,
-        ],
-      }}
-      transition={{
-        duration: 10 + i * 2,
-        repeat: Infinity,
-        delay: i * 0.8,
-        ease: "linear",
-      }}
-      className="absolute text-3xl pointer-events-none select-none"
-      style={{
-        filter: "blur(0.2px)",
-      }}
-    >
-      {emoji}
-    </motion.div>
-  ))}
-
-  {/* 📸 PHOTO */}
+       {stage === "story" && (
   <motion.div
-  key={current.img}
-  initial={{
-    opacity: 0,
-    scale: 0.85,
-    rotate: isRight ? -6 : 6,
-    y: 60,
-  }}
-  animate={{
-    opacity: 1,
-    scale: 1,
-    rotate: isRight ? -3 : 3,
-    y: 0,
-  }}
-  transition={{
-    type: "spring",
-    stiffness: 80,
-    damping: 16,
-  }}
-  className={`
-    absolute
-    ${isRight ? "right-5 top-14" : "left-5 top-14"}
-  `}
->
-  {/* 🌸 Outer Glow Layer (emotion pull) */}
-  <div className="absolute inset-0 scale-105 blur-2xl bg-pink-300/20 rounded-2xl" />
-
-  {/* 📸 Main Polaroid Frame */}
-  <div
-    className="
-      relative
-      bg-[#fffafc]
-      p-3
-      pb-10
-      
-      rounded-[10px]
-      shadow-[0_25px_60px_rgba(0,0,0,0.25)]
-      border border-white/60
-      rotate-[1deg]
-    "
+    key="story-stage"
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    exit={{ opacity: 0 }}
+    className="relative z-10 w-full h-full overflow-hidden  flex items-center justify-center"
+    onClick={nextSlide}
   >
-    {/* 📷 Image */}
-    <img
-      src={current.img}
-      alt=""
-      className="
-        w-60
-        h-[24rem]
-        object-cover
-        rounded-[6px]
-        grayscale-[0.05]
-        contrast-105
-      "
-    />
+    {/* 🌸 FLOATING EMOJIS */}
+    {Array.from({ length: 18 }).map((_, i) => {
+      const emojis = ["💖", "✨", "🎀", "💞", "🌸", "💕", "🥺", "💘"];
 
-    {/* 🩹 Tape (psychological “real memory” cue) */}
-    <div className="absolute top-[-12px] left-1/2 -translate-x-1/2 w-16 h-5 bg-pink-100/70 rotate-[-3deg] shadow-sm" />
+      return (
+        <motion.div
+          key={i}
+          initial={{
+            y: "120vh",
+            x: `${Math.random() * 100}vw`,
+            opacity: 0,
+            scale: 0.6,
+          }}
+          animate={{
+            y: "-20vh",
+            x: `${Math.random() * 100}vw`,
+            opacity: [0, 0.4, 0.2, 0],
+            rotate: [0, 20, -20],
+          }}
+          transition={{
+            duration: 8 + Math.random() * 6,
+            repeat: Infinity,
+            delay: Math.random() * 3,
+            ease: "linear",
+          }}
+          className="absolute text-2xl pointer-events-none select-none"
+          style={{ filter: "blur(0.3px)" }}
+        >
+          {emojis[i % emojis.length]}
+        </motion.div>
+      );
+    })}
 
-    {/* ✨ subtle bottom glow */}
-   
-  </div>
-</motion.div>
+    {/* 📸 + 💬 CENTER STACK */}
+    <div className="flex flex-col items-center justify-center gap-8">
 
-  {/* ✨ TEXT */}
- <motion.div
-  key={current.text}
-  initial={{ opacity: 0, y: 30, filter: "blur(8px)" }}
-  animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-  transition={{
-    duration: 0.8,
-    ease: [0.22, 1, 0.36, 1],
-  }}
-  className={`
-    absolute
-    bottom-24
-    z-20
-    w-full
-    px-7
-    flex
-    drop-shadow-[0_1px_2px_rgba(131,3,58,0.3)]
+      {/* 📸 PHOTO FRAME (CENTERED) */}
+      <motion.div
+        key={current.img}
+        initial={{ opacity: 0, scale: 0.8, y: 40 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{
+          type: "spring",
+          stiffness: 80,
+          damping: 16,
+        }}
+        className="relative"
+      >
+        {/* glow */}
+        <div className="absolute inset-0 scale-110 blur-2xl bg-pink-300/30 rounded-[18px]" />
 
-    ${isRight ? "justify-start" : "justify-end"}
-  `}
->
-  <div
-    className="
-      max-w-[85%]
-      text-white
-      text-[22px]
-      md:text-[26px]
-      font-medium
-      leading-[1.45]
-      tracking-[-0.02em]
-      backdrop-blur-[2px]
-      backdrop-shadow-[0_4px_25px_rgba(0,0,0,0.28)]
-      
-    "
-    style={{
-      textShadow: `
-        0 2px 10px rgba(0,0,0,0.28),
-        0 0 20px rgba(255,255,255,0.08)
-      `
-    }}
-  >
-    {typed}
+        {/* paper frame */}
+        <div className="relative  p-3 pb-10 rounded-[14px]
+                        shadow-[0_25px_60px_rgba(0,0,0,0.25)]
+                         rotate-[1deg]">
 
-    <motion.span
-      animate={{ opacity: [0, 1, 0] }}
-      transition={{
-        repeat: Infinity,
-        duration: 1,
-      }}
-      className="inline-block ml-[2px] text-pink-100"
-    >
-      |
-    </motion.span>
-  </div>
-</motion.div>
-</motion.div>
-        )}
+          <img
+            src={current.img}
+            className="w-60 h-[24rem] object-cover rounded-[10px] contrast-105 rotate-6"
+          />
 
+          {/* tape */}
+          <div className="absolute top-[-10px] left-1/2 -translate-x-1/2 w-14 h-4 bg-pink-100/70 rotate-[-4deg] shadow-sm" />
+        </div>
+      </motion.div>
+
+      {/* 💬 TEXT (CENTERED UNDER IMAGE) */}
+      <motion.div
+        key={current.text}
+        initial={{ opacity: 0, y: 20, filter: "blur(10px)" }}
+        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        className="text-center max-w-[85%] text-white text-[22px] md:text-[26px]
+                   font-medium leading-relaxed tracking-[-0.02em]"
+      >
+        {typed}
+
+        <motion.span
+          animate={{ opacity: [0, 1, 0] }}
+          transition={{ repeat: Infinity, duration: 0.9 }}
+          className="inline-block ml-1 text-pink-100"
+        >
+          |
+        </motion.span>
+      </motion.div>
+
+    </div>
+  </motion.div>
+)}
         {/* 💖 FINAL STAGE 1 */}
         {stage === "final1" && (
           <motion.div
@@ -373,7 +306,7 @@ export default function SurpriseContent() {
             animate={{ opacity: 1 }}
             className="fixed inset-0 z-50 flex items-center justify-center overflow-hidden"
           >
-            <div className="relative w-full max-w-[440px] h-[600px] flex items-center justify-center">
+            <div className="relative w-full max-w-[420px] h-[580px] flex items-center justify-center">
 
               {/* 💌 ENVELOPE - Scales small and fades behind the letter */}
               <motion.div
@@ -383,11 +316,11 @@ export default function SurpriseContent() {
                   y: [0, 0, 100],
                 }}
                 transition={{
-                  delay: 2.2, // Starts right after letter is fully "out"
+                  delay: 2, // Starts right after letter is fully "out"
                   duration: 1.5,
                   ease: "backIn"
                 }}
-                className="absolute w-[380px] h-[260px] z-10"
+                className="absolute w-[360px] h-[240px] z-10"
               >
                 <div className="absolute inset-0 bg-[#f9c9d9] rounded-xl shadow-lg" />
 
@@ -423,7 +356,7 @@ export default function SurpriseContent() {
           relative
           z-40
           w-[90vw]
-          max-w-[400px]
+          max-w-[380px]
           h-[580px]
           bg-[#fffefb]
           rounded-sm
