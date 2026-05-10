@@ -1,5 +1,17 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Bad+Script&family=Lugrasimo&family=Playwrite+NZ+Basic:wght@100..400&family=Playwrite+US+Modern:wght@100..400&display=swap');
 
+@theme {
+  /* This overrides the default sans font used by Tailwind */
+  --font-sans: "Playwrite NZ Basic",, sans-serif;
+}
+
+/* Apply it to the base layer to ensure the whole body uses it */
+@layer base {
+  body {
+    font-family: var(--font-sans);
+  }
+}
 /* =========================
    APPLE-STYLE FONT SYSTEM
 ========================= */
@@ -19,24 +31,9 @@
     rgba(0, 0, 0, 0.1) 0 10px 15px -3px,
     rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
 
-  --sans:
-    -apple-system,
-    BlinkMacSystemFont,
-    "SF Pro Display",
-    "SF Pro Text",
-    "Helvetica Neue",
-    sans-serif;
+ 
 
-  --heading:
-    -apple-system,
-    BlinkMacSystemFont,
-    "SF Pro Display",
-    "Helvetica Neue",
-    sans-serif;
-
-  --mono: ui-monospace, Consolas, monospace;
-
-  font: 18px/145% var(--sans);
+ 
 
   letter-spacing: -0.2px;
   color: var(--text);
@@ -116,19 +113,6 @@ p {
    APPLE HELLO TEXT
 ========================= */
 
-.apple-hello {
-  font-family:
-    -apple-system,
-    BlinkMacSystemFont,
-    "SF Pro Display",
-    sans-serif;
-
-  font-weight: 300;
-
-  letter-spacing: -1.8px;
-
-  line-height: 1.02;
-}
 
 /* =========================
    GLASS

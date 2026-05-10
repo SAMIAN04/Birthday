@@ -233,7 +233,8 @@ export default function SurpriseContent() {
       relative
       bg-[#fffafc]
       p-3
-      pb-14
+      pb-10
+      
       rounded-[10px]
       shadow-[0_25px_60px_rgba(0,0,0,0.25)]
       border border-white/60
@@ -258,9 +259,7 @@ export default function SurpriseContent() {
     <div className="absolute top-[-12px] left-1/2 -translate-x-1/2 w-16 h-5 bg-pink-100/70 rotate-[-3deg] shadow-sm" />
 
     {/* ✨ subtle bottom glow */}
-    <div className="absolute bottom-2 left-0 right-0 text-center text-xs text-pink-400/60 font-light">
-      memory
-    </div>
+   
   </div>
 </motion.div>
 
@@ -280,6 +279,8 @@ export default function SurpriseContent() {
     w-full
     px-7
     flex
+    drop-shadow-[0_1px_2px_rgba(131,3,58,0.3)]
+
     ${isRight ? "justify-start" : "justify-end"}
   `}
 >
@@ -293,7 +294,7 @@ export default function SurpriseContent() {
       leading-[1.45]
       tracking-[-0.02em]
       backdrop-blur-[2px]
-      drop-shadow-[0_4px_25px_rgba(0,0,0,0.28)]
+      backdrop-shadow-[0_4px_25px_rgba(0,0,0,0.28)]
       
     "
     style={{
@@ -343,7 +344,7 @@ export default function SurpriseContent() {
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.1, duration: 0.5 }}
-              className="glow-text text-xl mb-4"
+              className="glow-text text-xl mb-4 w-[90%]"
             >
               Here is a kinder for you my crazy little babygirl 😚
             </motion.h2>

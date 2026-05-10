@@ -35,7 +35,7 @@ const Latter = () => {
   };
 
   return (
-    <div className="w-[90%] flex justify-start ">
+    <div className="w-[90%] flex justify-start flex-col items-start gap-8">
       <motion.div
         variants={containerVariants}
         initial="hidden"
@@ -49,28 +49,32 @@ const Latter = () => {
           max-w-[340px]
           text-left
           whitespace-pre-wrap
-          font-handwritten
+        word-spacing-wide
+        drop-shadow-[0_2px_4px_rgba(131,3,58,0.2)]
+          
         "
       >
         {letters.map((letter, index) => (
           <motion.span
             key={index}
             variants={childVariants}
-            className="inline"
+            className="inline font-apple tracking-wide"
           >
-            {letter}
+                {letter}
+                
           </motion.span>
         ))}
 
         {/* The Signature */}
-        <motion.div
+       
+          </motion.div>
+           <motion.div
           variants={childVariants}
-          className="text-right mt-4 italic opacity-80"
+          className=" flex self-end mt-8 italic opacity-80 font-apple  text-[#83033ae3] drop-shadow-[0_2px_4px_rgba(131,3,58,0.2)]"
           style={{ fontSize: "15px" }}
         >
           — Your man 😌💕
         </motion.div>
-      </motion.div>
     </div>
   );
 };
