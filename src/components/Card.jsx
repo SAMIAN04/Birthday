@@ -1,8 +1,8 @@
 const Card = ({ children, onNext, buttonText = "Next 💕" }) => {
   return (
-    <div className="absolute w-full h-full bg-white rounded-3xl shadow-2xl p-8  flex flex-col justify-between animate-slideIn">
+    <div className="absolute w-full h-full p-8  flex flex-col justify-between animate-slideIn">
       
-          <div className="flex-1 flex items-center justify-center text-center bg-pink-100 rounded-xl p-6">
+          <div className="flex-1 flex items-center justify-center text-center  rounded-xl p-6">
         {children}
       </div>
 
