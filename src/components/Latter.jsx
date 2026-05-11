@@ -12,7 +12,7 @@ const Latter = () => {
       opacity: 1,
       transition: {
         staggerChildren: 0.035,
-        delayChildren: 3.6,
+        delayChildren: 0.7,
       },
     },
   };

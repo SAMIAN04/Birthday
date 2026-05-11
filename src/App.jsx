@@ -4,52 +4,79 @@ import SurpriseContent from "./components/SurpriseContent";
 import confetti from "canvas-confetti";
 
 function App() {
-  const [stage, setStage] = useState("loading"); 
-  // loading → start → countdown → surprise
-
+  const [stage, setStage] = useState("loading");
   const [rumble, setRumble] = useState(false);
-  const [isReady, setIsReady] = useState(false);
 
   const bassRef = useRef(null);
   const heartbeatRef = useRef(null);
 
-  // 💥 PRELOAD + CINEMATIC LOADING
+  // 💥 PRELOAD + CACHE EVERYTHING
   useEffect(() => {
     const assets = [
+      // intro
       "/wait.gif",
       "/excited.gif",
+
+      // audio
       "/heartbeat.mp3",
-      "/bass.mp3",
+      "/happy.mp3",
+      "/bgm.mp3",
+
+      // gifs
+      "/happy.gif",
+      "/presents.gif",
+      "/love.gif",
+      "/omg.gif",
+      "/kinder.gif",
+
+      // slides
+      "/1.png",
+      "/2.png",
+      "/3.png",
+      "/4.png",
+      "/5.png",
+      "/6.png",
     ];
 
     let loaded = 0;
 
     const checkDone = () => {
       loaded++;
-      if (loaded === assets.length) {
-        setIsReady(true);
 
-        // 🎬 small cinematic delay before showing start
+      if (loaded >= assets.length) {
+        // small cinematic delay
         setTimeout(() => {
           setStage("start");
-        }, 1500);
+        }, 1200);
       }
     };
 
     assets.forEach((src) => {
+      // 🎵 AUDIO PRELOAD
       if (src.endsWith(".mp3")) {
         const audio = new Audio();
+
         audio.src = src;
+        audio.preload = "auto";
+
         audio.oncanplaythrough = checkDone;
-      } else {
+        audio.onerror = checkDone;
+      }
+
+      // 🖼️ IMAGE / GIF PRELOAD
+      else {
         const img = new Image();
+
         img.src = src;
+        img.decoding = "async";
+
         img.onload = checkDone;
+        img.onerror = checkDone;
       }
     });
   }, []);
 
-  // 💓 heartbeat during loading (cinematic)
+  // 💓 heartbeat during loading
   useEffect(() => {
     if (stage === "loading" && heartbeatRef.current) {
       heartbeatRef.current.play().catch(() => {});
@@ -62,10 +89,13 @@ function App() {
     }
 
     if (bassRef.current) {
-      bassRef.current.play().then(() => {
-        bassRef.current.pause();
-        bassRef.current.currentTime = 0;
-      }).catch(() => {});
+      bassRef.current
+        .play()
+        .then(() => {
+          bassRef.current.pause();
+          bassRef.current.currentTime = 0;
+        })
+        .catch(() => {});
     }
 
     if (heartbeatRef.current) {
@@ -80,6 +110,7 @@ function App() {
     setRumble(true);
 
     let count = 0;
+
     const interval = setInterval(() => {
       if (bassRef.current) {
         bassRef.current.currentTime = 0;
@@ -91,6 +122,7 @@ function App() {
       }
 
       count++;
+
       if (count > 8) clearInterval(interval);
     }, 100);
   };
@@ -111,13 +143,14 @@ function App() {
   };
 
   return (
-    <div className={`min-h-screen flex items-center justify-center bg-fuchsia-100 font-poppins italic ${
-      rumble ? "rumble-hard" : ""
-    }`}>
-
+    <div
+      className={`min-h-screen flex items-center justify-center bg-fuchsia-100 italic ${
+        rumble ? "rumble-hard" : ""
+      }`}
+    >
       {/* 🔊 AUDIO */}
-      <audio ref={bassRef} src="/happy.mp3" />
-      <audio ref={heartbeatRef} src="/heartbeat.mp3" loop />
+      <audio ref={bassRef} src="/happy.mp3" preload="auto" />
+      <audio ref={heartbeatRef} src="/heartbeat.mp3" preload="auto" loop />
 
       {/* 🎬 LOADING SCREEN */}
       {stage === "loading" && (
@@ -126,7 +159,6 @@ function App() {
             Preparing something special for you 💕
           </p>
 
-          {/* 💓 pulsing heart synced vibe */}
           <div className="w-16 h-16 bg-pink-400 rounded-full animate-ping"></div>
         </div>
       )}
@@ -141,7 +173,7 @@ function App() {
             <img
               src="/excited.gif"
               alt="Start"
-              className="w-40 drop-shadow-2xl "
+              className="w-40 drop-shadow-2xl"
             />
           </button>
 
@@ -157,9 +189,7 @@ function App() {
       )}
 
       {/* 🎉 SURPRISE */}
-      {stage === "surprise" && (
-        <SurpriseContent />
-      )}
+      {stage === "surprise" && <SurpriseContent />}
     </div>
   );
 }

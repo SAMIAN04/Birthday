@@ -213,7 +213,7 @@ export default function SurpriseContent() {
         }}
         className="relative"
       >
-        {/* glow */}
+        
         <div className="absolute inset-0 scale-110 blur-2xl bg-pink-300/30 rounded-[18px]" />
 
         {/* paper frame */}
@@ -371,9 +371,9 @@ export default function SurpriseContent() {
 
                 
                 <motion.div
-                  initial={{ scale: 0, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  transition={{ delay: 3.2, type: "spring", damping: 12 }}
+                  // initial={{ scale: 0, opacity: 0 }}
+                  // animate={{ scale: 1, opacity: 1 }}
+                  // transition={{ delay: 2, type: "spring", damping: 12 }}
                   className="mb-8 flex items-center justify-center flex-col gap-6"
                 >
                   <img src="/love.gif" className="w-40 h-36 object-cover rounded-2xl rotate-2 " />

@@ -1,7 +1,7 @@
 import Card from "./Card";
 import { useEffect, useRef, useState } from "react";
 
-const TARGET_DATE = "2026-05-13T00:00:00";
+const TARGET_DATE = "2026-05-10T00:00:00";
 
 const TIME_UNITS = [
   { label: "Days", ms: 1000 * 60 * 60 * 24 },
